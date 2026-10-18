@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouveau Document - Safeerverse QuickQuote</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="app.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo-container">
+            <a href="index.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+                <img src="logo.png" alt="Logo" style="height: 30px;">
+                <span class="logo-text">Safeerverse <span class="gold-text">QuickQuote</span></span>
+            </a>
+        </div>
+        <div class="nav-links">
+            <a href="history.html">Mes Documents</a>
+            <a href="index.html">← Accueil</a>
+        </div>
+    </nav>
+
+    <main class="app-container">
+        <div class="app-header">
+            <h1 id="page-title">Créer un nouveau document</h1>
+            <div style="margin-top: 1rem; display: flex; justify-content: center; align-items: center; gap: 1rem;">
+                <label style="color: var(--text-muted); font-weight: bold;">N° du document :</label>
+                <input type="text" id="docNumber" style="padding: 0.5rem; background: var(--bg-card); color: var(--accent-gold); border: 1px solid var(--border-color); border-radius: 8px; font-weight: bold; text-align: center; font-size: 1.2rem; width: 200px;">
+            </div>
+        </div>
+
+        <div class="app-layout">
+            <div class="form-section">
+                <!-- Émetteur -->
+                <div class="card">
+                    <h2>Vos Informations (Émetteur)</h2>
+                    <div class="form-group">
+                        <label>Logo de votre entreprise (Optionnel)</label>
+                        <input type="file" id="userLogo" accept="image/png, image/jpeg" onchange="handleLogoUpload(event)">
+                    </div>
+                    <div class="form-group"><label>Nom de l'entreprise / Votre nom</label><input type="text" id="senderName" oninput="saveSettings()"></div>
+                    <div class="form-group"><label>Adresse de l'entreprise</label><input type="text" id="senderAddress" oninput="saveSettings()"></div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Email</label><input type="email" id="senderEmail" oninput="saveSettings()"></div>
+                        <div class="form-group"><label>Téléphone</label><input type="text" id="senderPhone" oninput="saveSettings()"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>RC</label><input type="text" id="senderRc" oninput="saveSettings()"></div>
+                        <div class="form-group"><label>NIF</label><input type="text" id="senderNif" oninput="saveSettings()"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>NIS (Statistique)</label><input type="text" id="senderNis" oninput="saveSettings()"></div>
+                        <div class="form-group"><label>AI (Impôt)</label><input type="text" id="senderAi" oninput="saveSettings()"></div>
+                    </div>
+                    <div class="form-group"><label>Compte Bancaire / CCP</label><input type="text" id="senderBank" placeholder="RIB ou CCP" oninput="saveSettings()"></div>
+                </div>
+
+                <!-- Client -->
+                <div class="card">
+                    <h2>Informations Client</h2>
+                    <div class="form-group"><label>Nom du client / Entreprise</label><input type="text" id="clientName" oninput="updatePreview()"></div>
+                    <div class="form-group"><label>Adresse du client</label><input type="text" id="clientAddress"></div>
+                    <div class="form-row">
+                        <div class="form-group"><label>RC Client (B2B)</label><input type="text" id="clientRc"></div>
+                        <div class="form-group"><label>NIF Client (B2B)</label><input type="text" id="clientNif"></div>
+                    </div>
+                </div>
+
+                <!-- Détails -->
+                <div class="card">
+                    <h2>Détails du Document</h2>
+                    <div id="items-container"></div>
+                    <button class="btn btn-secondary" style="width: 100%; margin-top: 1rem;" onclick="addItem()">+ Ajouter une ligne</button>
+                    
+                    <div class="form-row" style="margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+                        <div class="form-group" id="validity-group">
+                            <label>Validité (Jours)</label>
+                            <input type="number" id="validityDays" value="30" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label>Conditions de paiement</label>
+                            <select id="paymentTerms">
+                                <option value="Paiement à réception">Paiement à réception</option>
+                                <option value="Paiement à 30 jours">Paiement à 30 jours</option>
+                                <option value="Paiement par virement">Virement bancaire</option>
+                                <option value="Paiement par chèque">Chèque</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Preview -->
+            <div class="preview-section">
+                <div class="card preview-card">
+                    <h2>Aperçu du Document</h2>
+                    <div class="preview-client"><strong>Client:</strong> <span id="preview-client-name">-</span></div>
+                    <table class="preview-table">
+                        <thead><tr><th>Désignation</th><th>Qté</th><th>P.U HT</th><th>Total HT</th></tr></thead>
+                        <tbody id="preview-items"></tbody>
+                    </table>
+                    <div class="totals-section">
+                        <div class="total-row"><span>Total HT:</span><span id="subtotal">0,00 DZD</span></div>
+                        <div class="total-row" style="align-items: center;">
+                            <span>Remise (DA):</span>
+                            <input type="number" id="discountAmount" value="0" min="0" style="width: 100px; padding: 0.2rem; text-align: right; background: transparent; border: 1px solid var(--border-color); color: white; border-radius: 4px;" oninput="updatePreview()">
+                        </div>
+                        <div class="total-row" style="align-items: center;">
+                            <span>TVA (%):</span>
+                            <input type="number" id="tvaRate" value="19" min="0" style="width: 100px; padding: 0.2rem; text-align: right; background: transparent; border: 1px solid var(--border-color); color: white; border-radius: 4px;" oninput="updatePreview()">
+                        </div>
+                        <div class="total-row"><span>Montant TVA:</span><span id="tax">0,00 DZD</span></div>
+                        <div class="total-row grand-total"><span>Total TTC:</span><span id="grand-total">0,00 DZD</span></div>
+                    </div>
+                    <div class="action-buttons" style="margin-top: 1.5rem;">
+                        <button class="btn btn-primary" style="width: 100%;" id="save-btn" onclick="saveDocument()">💾 Enregistrer</button>
+                        <button class="btn btn-secondary" style="width: 100%; margin-top: 0.5rem; background-color: var(--accent-gold); color: #000;" id="pdf-btn" onclick="exportPDF()">📄 Télécharger le PDF</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
