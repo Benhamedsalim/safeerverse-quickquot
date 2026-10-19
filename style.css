@@ -259,10 +259,43 @@ footer {
     .hero h1 {
         font-size: 2.2rem;
     }
-    .nav-links {
-        display: none;
-    }
     .logo-display {
         margin-top: 2rem;
     }
+    
+    /* إضافة قائمة الهاتف */
+    .menu-toggle {
+        display: block;
+        font-size: 1.8rem;
+        color: var(--text-light);
+        cursor: pointer;
+    }
+
+    .nav-links {
+        display: none; /* مخفية افتراضياً */
+        flex-direction: column;
+        width: 100%;
+        background-color: var(--bg-card);
+        position: absolute;
+        top: 100%;
+        left: 0;
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--border-color);
+        text-align: center;
+    }
+
+    .nav-links.active {
+        display: flex; /* تظهر عند الضغط على الزر */
+    }
+
+    .nav-links a {
+        margin: 0.8rem 0;
+        font-size: 1rem;
+    }
 }
+
+/* إخفاء زر القائمة على الكمبيوتر */
+.menu-toggle {
+    display: none;
+}
+
