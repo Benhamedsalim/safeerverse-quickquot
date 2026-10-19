@@ -250,6 +250,10 @@ footer {
     font-size: 0.9rem;
 }
 
+.menu-toggle {
+    display: none;
+}
+
 @media (max-width: 768px) {
     .hero {
         flex-direction: column;
@@ -294,8 +298,5 @@ footer {
     }
 }
 
-/* إخفاء زر القائمة على الكمبيوتر */
-.menu-toggle {
-    display: none;
-}
+
 
