@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Documents - Safeerverse QuickQuote</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="app.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        .history-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+            gap: 1.5rem; 
+            margin-top: 2rem; 
+        }
+        .history-card { 
+            background-color: var(--bg-card); 
+            border: 1px solid var(--border-color); 
+            border-radius: 12px; 
+            display: flex; 
+            flex-direction: column;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s; 
+        }
+        .history-card:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+        
+        /* الشريط العلوي الملون */
+        .card-top-bar { height: 6px; width: 100%; }
+        .bar-devis { background-color: var(--accent-gold); }
+        .bar-proforma { background-color: #888; }
+        .bar-facture { background-color: var(--primary-purple); }
+
+        .card-content { padding: 1.5rem; flex-grow: 1; }
+        
+        .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+        .doc-number { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; }
+        .client-name { font-size: 1.2rem; font-weight: 700; color: var(--text-light); margin-bottom: 0.3rem; }
+        .doc-date { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; }
+        .doc-amount { font-size: 1.5rem; font-weight: 700; color: var(--accent-gold); }
+        
+        /* منطقة الأزرار */
+        .card-actions { 
+            display: flex; 
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem; 
+            background-color: rgba(0,0,0,0.2); 
+            border-top: 1px solid var(--border-color);
+        }
+        .action-group { display: flex; gap: 0.5rem; }
+        
+        /* تصميم الأزرار */
+        .btn-icon { 
+            padding: 0.6rem; 
+            border-radius: 8px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-size: 0.9rem;
+            border: 1px solid var(--border-color);
+            background: transparent;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-icon:hover { background-color: rgba(255,255,255,0.1); }
+        .btn-pdf { background-color: var(--primary-purple); border-color: var(--primary-purple); color: white; }
+        .btn-pdf:hover { background-color: var(--primary-purple-hover); }
+        
+        .btn-convert { font-size: 0.8rem; padding: 0.4rem 0.8rem; }
+        .btn-convert-proforma { border-color: #888; color: #ccc; }
+        .btn-convert-facture { border-color: var(--accent-gold); color: var(--accent-gold); }
+        
+        .btn-delete { color: #ef4444; border-color: transparent; }
+        .btn-delete:hover { background-color: rgba(239, 68, 68, 0.1); }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo-container">
+            <a href="index.html" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+                <img src="logo.png" alt="Logo" style="height: 30px;">
+                <span class="logo-text">Safeerverse <span class="gold-text">QuickQuote</span></span>
+            </a>
+        </div>
+        <div class="nav-links">
+            <a href="app.html">+ Nouveau Document</a>
+            <a href="index.html">Accueil</a>
+        </div>
+    </nav>
+
+    <main class="app-container">
+        <div class="app-header" style="text-align: left; display: flex; justify-content: space-between; align-items: flex-end;">
+            <div>
+                <h1>Tableau de bord</h1>
+                <p style="color: var(--text-muted);">Gérez vos devis, proformas et factures.</p>
+            </div>
+        </div>
+
+        <div id="history-list" class="history-grid"></div>
+        
+        <p id="no-quotes" style="text-align: center; color: var(--text-muted); margin-top: 3rem; display: none;">
+            Aucun document enregistré pour le moment. <br><br>
+            <a href="app.html" class="btn btn-primary">Créer votre premier document</a>
+        </p>
+    </main>
+
+    <script src="history.js"></script>
+</body>
+</html>
