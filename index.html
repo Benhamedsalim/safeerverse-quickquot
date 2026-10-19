@@ -17,7 +17,11 @@
                 <span class="logo-text">Safeerverse <span class="gold-text">QuickQuote</span></span>
             </a>
         </div>
-        <div class="nav-links">
+        
+        <!-- زر القائمة للهاتف -->
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+
+        <div class="nav-links" id="nav-links">
             <a href="#features">Fonctionnalités</a>
             <a href="#how-it-works">Comment ça marche</a>
             <a href="history.html">Mes Documents</a>
@@ -93,7 +97,11 @@
             </div>
         </div>
     </section>
-
+    <script>
+        function toggleMenu() {
+            document.getElementById('nav-links').classList.toggle('active');
+        }
+    </script>
     <footer>
         <p>&copy; 2026 Safeerverse - Business Technology & Digital Solutions.</p>
     </footer>
