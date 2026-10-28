@@ -33,7 +33,7 @@ dbRequest.onupgradeneeded = function(event) {
 dbRequest.onsuccess = function(event) {
     db = event.target.result;
     loadSettings();
-    prefillDocumentNumber(); // ملء رقم الوثيقة تلقائياً عند التحميل
+    prefillDocumentNumber(); 
 };
 
 function handleLogoUpload(event) {
@@ -199,7 +199,7 @@ function saveDocument() {
         return;
     }
 
-    // التحقق من عدم وجود الرقم مسبقاً
+   
     db.transaction(["quotes"], "readonly").objectStore("quotes").getAll().onsuccess = function(e) {
         const exists = e.target.result.some(d => d.number === manualNumber);
         if (exists) {
@@ -246,7 +246,7 @@ function proceedToSave(manualNumber) {
         document.getElementById('clientRc').value = '';
         items = [{ id: Date.now(), desc: 'Prestation de service', qty: 1, price: 0 }];
         renderItemsForm(); updatePreview();
-        // إعادة توليد الرقم للوثيقة التالية
+       
         document.getElementById('docNumber').value = '';
         prefillDocumentNumber();
     };
