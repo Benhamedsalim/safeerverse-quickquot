@@ -179,7 +179,7 @@ html {
     font-size: 0.95rem;
 }
 
-/* How it works */
+
 .how-it-works {
     padding: 5rem 5%;
     text-align: center;
@@ -276,7 +276,7 @@ footer {
     }
 
     .nav-links {
-        display: none; /* مخفية افتراضياً */
+        display: none; 
         flex-direction: column;
         width: 100%;
         background-color: var(--bg-card);
@@ -289,7 +289,7 @@ footer {
     }
 
     .nav-links.active {
-        display: flex; /* تظهر عند الضغط على الزر */
+        display: flex; 
     }
 
     .nav-links a {
