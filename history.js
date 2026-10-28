@@ -48,7 +48,6 @@ function loadHistory() {
 
             const totalDisplay = doc.totalTTC ? doc.totalTTC : doc.items.reduce((sum, item) => sum + (item.qty * item.price), 0);
             
-            // توزيع الأزرار بشكل ذكي
             let convertButtons = '';
             if (doc.docType === 'devis') {
                 convertButtons = `
@@ -102,23 +101,19 @@ function convertDoc(id, targetType) {
         const originalQuote = request.result;
         if (originalQuote.docType === targetType) return;
 
-        // توليد رقم مقترح
         generateDocumentNumber(targetType, function(suggestedNumber) {
             
-            // نافذة إدخال للمستخدم (تسمح بتغيير الرقم)
             let newNumber = prompt(`Veuillez confirmer le numéro pour la nouvelle ${targetType === 'facture' ? 'Facture' : 'Proforma'} :`, suggestedNumber);
             
             if (newNumber === null || newNumber.trim() === "") return; // إذا ألغى المستخدم
             newNumber = newNumber.trim();
 
-            // التحقق من عدم التكرار
             db.transaction(["quotes"], "readonly").objectStore("quotes").getAll().onsuccess = function(e) {
                 const exists = e.target.result.some(d => d.number === newNumber);
                 if (exists) {
                     if (!confirm(`⚠️ Le numéro "${newNumber}" existe déjà. Continuer quand même ?`)) return;
                 }
 
-                // الحفظ
                 const newDoc = {
                     ...originalQuote,
                     id: Date.now(),
@@ -164,7 +159,6 @@ function formatCurrency(amount) {
     return amount.toLocaleString('fr-FR', { style: 'currency', currency: 'DZD' });
 }
 
-// تم إصلاح دالة الترقيم لمنع الخطأ (2026/2027)
 function generateDocumentNumber(type, callback) {
     const currentYear = new Date().getFullYear();
     const transaction = db.transaction(["quotes"], "readonly");
@@ -176,16 +170,13 @@ function generateDocumentNumber(type, callback) {
         
         docs.forEach(d => {
             if (d.docType === type && d.number) {
-                // استخراج الرقم بغض النظر عن الصيغة
                 let num = 0;
                 if (type === 'facture') {
-                    // صيغة الفاتورة: 2026/001
                     const parts = d.number.split('/');
                     if (parts.length === 2 && parts[0] === currentYear.toString()) {
                         num = parseInt(parts[1], 10);
                     }
                 } else {
-                    // صيغة الديفي والبروفورما: DEVIS-001/2026
                     const parts = d.number.split('-');
                     if (parts.length === 2) {
                         const numPart = parts[1].split('/')[0];
@@ -210,7 +201,6 @@ function generateDocumentNumber(type, callback) {
     };
 }
 
-// دالة توليد الـ PDF (نفس التصميم القانوني الممتاز)
 function downloadPDF(id) {
     const transaction = db.transaction(["quotes"], "readonly");
     const request = transaction.objectStore("quotes").get(id);
